@@ -1,65 +1,165 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useState } from 'react'
+import './landing.css'
+
+export default function LandingPage() {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const totalSlides = 4
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % totalSlides)
+  }
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides)
+  }
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index)
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="landing">
+      {/* Carousel Container */}
+      <div 
+        className="carousel-container" 
+        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+      >
+        {/* Slide 1 - Hero */}
+        <section className="slide slide-hero">
+          <div className="slide-content">
+            <h1 className="hero-title">Bienvenue dans Reelms</h1>
+            <p className="hero-subtitle">
+              L'univers où vos aventures prennent vie
+            </p>
+            <p className="hero-description">
+              Plongez dans des sessions de jeu de rôle épiques, guidées par des maîtres 
+              du jeu passionnés. Que vous soyez débutant ou vétéran, votre légende commence ici.
+            </p>
+            <a href="/sessions" className="btn btn-primary btn-large hero-cta">
+              Découvrir les Sessions
+            </a>
+          </div>
+        </section>
+
+        {/* Slide 2 - Univers */}
+        <section className="slide slide-univers">
+          <div className="slide-content">
+            <h2 className="slide-title">Explorez l'Univers de Reelms</h2>
+            <div className="univers-preview">
+              <div className="univers-text">
+                <p className="univers-intro">
+                  introduction
+                </p>
+                <p className="univers-description">
+                  description
+                </p>
+              </div>
+              <div className="univers-cta">
+                <a href="/lore" className="btn btn-primary btn-large">
+                  Découvrir le Lore Complet
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Slide 3 - Sessions */}
+        <section className="slide slide-sessions">
+          <div className="slide-content">
+            <h2 className="slide-title">Nos Sessions</h2>
+            <div className="sessions-grid">
+              <div className="session-card">
+                <h3>Oneshot</h3>
+                <p className="session-duration">3-4 heures</p>
+                <p className="session-description">
+                  Session unique parfaite pour découvrir le jeu de rôle ou vivre 
+                  une aventure rapide.
+                </p>
+                <p className="session-price">20€</p>
+              </div>
+              <div className="session-card">
+                <h3>Scénario</h3>
+                <p className="session-duration">3-5 sessions</p>
+                <p className="session-description">
+                  Campagne complète avec développement de personnage et arc narratif épique.
+                </p>
+                <p className="session-price">50-80€</p>
+              </div>
+              <div className="session-card">
+                <h3>Coaching</h3>
+                <p className="session-duration">Variable</p>
+                <p className="session-description">
+                  Accompagnement personnalisé pour améliorer vos compétences en JDR.
+                </p>
+                <p className="session-price">50-200€</p>
+              </div>
+              <div className="session-card">
+                <h3>Sur-Mesure</h3>
+                <p className="session-duration">Personnalisé</p>
+                <p className="session-description">
+                  Session entièrement adaptée à vos envies et besoins spécifiques.
+                </p>
+                <p className="session-price">60-500€</p>
+              </div>
+            </div>
+            <a href="/sessions" className="btn btn-secondary btn-large">
+              Voir Toutes les Sessions
+            </a>
+          </div>
+        </section>
+
+        {/* Slide 4 - CTA Final */}
+        <section className="slide slide-cta">
+          <div className="slide-content">
+            <h2 className="cta-title">Prêt à Commencer Votre Aventure ?</h2>
+            <p className="cta-description">
+              Rejoignez des centaines d'aventuriers qui ont déjà découvert l'univers de Reelms. 
+              Chaque session est une opportunité unique de créer des souvenirs inoubliables.
+            </p>
+            <div className="cta-buttons">
+              <a href="/sessions" className="btn btn-primary btn-large">
+                Réserver une Session
+              </a>
+              <a href="/lore" className="btn btn-secondary btn-large">
+                Découvrir l'Univers
+              </a>
+            </div>
+            <p className="cta-note">
+              Première session ? Pas de souci ! Nos MJ sont là pour vous guider.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      {/* Navigation Arrows */}
+      <button 
+        className="carousel-arrow carousel-arrow-left" 
+        onClick={prevSlide}
+        aria-label="Slide précédent"
+      >
+        ‹
+      </button>
+      <button 
+        className="carousel-arrow carousel-arrow-right" 
+        onClick={nextSlide}
+        aria-label="Slide suivant"
+      >
+        ›
+      </button>
+
+      {/* Dots Navigation */}
+      <div className="carousel-dots">
+        {[...Array(totalSlides)].map((_, index) => (
+          <button
+            key={index}
+            className={`carousel-dot ${currentSlide === index ? 'active' : ''}`}
+            onClick={() => goToSlide(index)}
+            aria-label={`Aller au slide ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
-  );
+  )
 }

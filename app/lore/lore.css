@@ -1,0 +1,422 @@
+/* ============================================
+   LORE PAGE - Style Grimoire
+   ============================================ */
+
+.lore {
+  min-height: 100vh;
+  padding: var(--spacing-lg) 0;
+}
+
+/* Header - Style Manuscrit */
+.lore-header {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+}
+
+.lore-header::before,
+.lore-header::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-red) 20%,
+    var(--color-red) 80%,
+    transparent
+  );
+}
+
+.lore-header::before {
+  top: 0;
+}
+
+.lore-header::after {
+  bottom: 0;
+}
+
+.lore-header h1 {
+  font-family: var(--font-jacques), serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: var(--color-red);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 2px;
+}
+
+.lore-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-style: italic;
+  opacity: 0.8;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Notice temporaire */
+.lore-notice {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(255, 193, 7, 0.15);
+  border: 2px dashed rgba(255, 193, 7, 0.6);
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lore-notice p {
+  margin: 0;
+  font-size: clamp(0.8125rem, 1.5vw, 0.875rem);
+  font-weight: 600;
+  color: #856404;
+}
+
+/* Ornements décoratifs */
+.lore-ornament {
+  text-align: center;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: var(--spacing-md);
+  opacity: 0.7;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+}
+
+/* Sections - Style Parchemin */
+.lore-section {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(28, 28, 28, 0.3);
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Effet coins déchirés */
+.lore-section::before,
+.lore-section::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-paper);
+}
+
+.lore-section::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid rgba(28, 28, 28, 0.3);
+  border-left: 1px solid rgba(28, 28, 28, 0.3);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.lore-section::after {
+  top: -1px;
+  right: -1px;
+  border-top: 1px solid rgba(28, 28, 28, 0.3);
+  border-right: 1px solid rgba(28, 28, 28, 0.3);
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
+}
+
+.lore-section.section-dark {
+  background-color: rgba(212, 194, 149, 0.4);
+  border-color: rgba(28, 28, 28, 0.4);
+}
+
+.lore-section h2 {
+  font-family: var(--font-jacques), serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--color-red);
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  position: relative;
+  padding-bottom: var(--spacing-sm);
+}
+
+.lore-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-red),
+    transparent
+  );
+}
+
+.lore-section h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-ink);
+  font-weight: 600;
+  position: relative;
+  padding-left: var(--spacing-md);
+}
+
+.lore-section h3::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--color-red);
+  font-size: 0.8em;
+}
+
+.lore-section p {
+  margin-bottom: var(--spacing-sm);
+  text-align: justify;
+  line-height: 1.8;
+  text-indent: 2em;
+  hyphens: auto;
+}
+
+.lore-section p:first-of-type {
+  text-indent: 0;
+}
+
+.lore-section p::first-letter {
+  font-size: 2em;
+  font-weight: 700;
+  float: left;
+  line-height: 0.85;
+  margin: 0.1em 0.1em 0 0;
+  color: var(--color-red);
+}
+
+/* Grille de cartes - Style Codex */
+.lore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.lore-card {
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: var(--spacing-md);
+  border: 2px solid rgba(28, 28, 28, 0.2);
+  border-left-width: 6px;
+  border-left-color: var(--color-red);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.lore-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 30px 30px 0;
+  border-color: transparent rgba(119, 14, 14, 0.15) transparent transparent;
+  transition: all 0.3s ease;
+}
+
+.lore-card:hover {
+  transform: translateY(-4px) translateX(4px);
+  box-shadow: -8px 8px 24px rgba(119, 14, 14, 0.2);
+  border-left-color: var(--color-ink);
+}
+
+.lore-card:hover::before {
+  border-width: 0 50px 50px 0;
+}
+
+.lore-card h3 {
+  font-family: var(--font-jacques), serif;
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  color: var(--color-red);
+  margin: 0 0 var(--spacing-sm);
+  padding-left: 0;
+}
+
+.lore-card h3::before {
+  content: none;
+}
+
+.lore-card p {
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  line-height: 1.7;
+  margin: 0;
+  text-indent: 0;
+  text-align: left;
+}
+
+.lore-card p::first-letter {
+  font-size: inherit;
+  font-weight: inherit;
+  float: none;
+  margin: 0;
+  color: inherit;
+}
+
+/* Factions - Style Héraldique */
+.faction {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: rgba(255, 255, 255, 0.3);
+  border-left: 6px solid var(--color-red);
+  position: relative;
+}
+
+.faction::before {
+  content: '⚜';
+  position: absolute;
+  left: -3px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  color: var(--color-red);
+  background-color: var(--color-paper-dark);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-red);
+  border-radius: 50%;
+}
+
+.faction h3 {
+  margin-left: var(--spacing-md);
+  margin-top: 0;
+}
+
+.faction p {
+  margin-left: var(--spacing-md);
+}
+
+/* Content wrapper pour indentation */
+.lore-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* CTA Final - Style Sceau */
+.lore-cta {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: linear-gradient(
+    135deg,
+    rgba(119, 14, 14, 0.08) 0%,
+    rgba(119, 14, 14, 0.12) 100%
+  );
+  border: 3px double var(--color-red);
+  margin-top: var(--spacing-xl);
+  position: relative;
+  box-shadow: 0 8px 32px rgba(119, 14, 14, 0.2);
+}
+
+.lore-cta::before,
+.lore-cta::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-red);
+}
+
+.lore-cta::before {
+  top: -3px;
+  left: -3px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.lore-cta::after {
+  bottom: -3px;
+  right: -3px;
+  border-left: none;
+  border-top: none;
+}
+
+.lore-cta h2 {
+  font-family: var(--font-jacques), serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--color-red);
+  margin-bottom: var(--spacing-md);
+}
+
+.lore-cta h2::after {
+  content: none;
+}
+
+.lore-cta p {
+  max-width: 700px;
+  margin: 0 auto var(--spacing-lg);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.7;
+  text-indent: 0;
+}
+
+.lore-cta p::first-letter {
+  font-size: inherit;
+  font-weight: inherit;
+  float: none;
+  margin: 0;
+  color: inherit;
+}
+
+/* Effet de vieillissement du papier */
+@media (min-width: 769px) {
+  .lore-section {
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(119, 14, 14, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(28, 28, 28, 0.03) 0%, transparent 50%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lore-section {
+    padding: var(--spacing-md);
+  }
+
+  .lore-section::before,
+  .lore-section::after {
+    width: 15px;
+    height: 15px;
+  }
+
+  .lore-card {
+    border-left-width: 4px;
+  }
+
+  .faction::before {
+    position: static;
+    transform: none;
+    margin: 0 auto var(--spacing-sm);
+  }
+
+  .faction h3,
+  .faction p {
+    margin-left: 0;
+  }
+
+  .lore-cta::before,
+  .lore-cta::after {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Sélection de texte personnalisée */
+::selection {
+  background-color: rgba(119, 14, 14, 0.3);
+  color: var(--color-ink);
+}

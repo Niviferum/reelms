@@ -71,7 +71,9 @@ export async function GET(request: NextRequest) {
     await session.save()
 
     // Rediriger vers le dashboard
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/dashboard`)
+    return NextResponse.redirect(
+      `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
+    )
   } catch (error) {
     console.error('Error in Discord callback:', error)
     return NextResponse.redirect(

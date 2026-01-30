@@ -1,0 +1,146 @@
+/* ============================================
+   LOGIN PAGE
+   ============================================ */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+}
+
+.login-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.login-container {
+  max-width: 480px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(28, 28, 28, 0.2);
+  padding: var(--spacing-lg);
+  box-shadow: 0 8px 32px rgba(28, 28, 28, 0.15);
+}
+
+/* Header */
+.login-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(28, 28, 28, 0.2);
+}
+
+.login-logo {
+  font-family: var(--font-jacques), serif;
+  font-size: 3rem;
+  color: var(--color-red);
+  margin-bottom: var(--spacing-xs);
+}
+
+.login-tagline {
+  font-size: 1.125rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Content */
+.login-content h2 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+}
+
+.login-description {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.8;
+}
+
+/* Discord Button */
+.btn-discord {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: #5865F2;
+  color: white;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: var(--spacing-lg);
+}
+
+.btn-discord:hover {
+  background-color: #4752C4;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(88, 101, 242, 0.3);
+}
+
+.btn-discord svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Benefits */
+.login-benefits {
+  padding: var(--spacing-md);
+  background-color: rgba(119, 14, 14, 0.05);
+  border-left: 3px solid var(--color-red);
+  margin-top: var(--spacing-lg);
+}
+
+.login-benefits h3 {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.login-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.login-benefits li {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Footer note */
+.login-note {
+  text-align: center;
+  margin-top: var(--spacing-lg);
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+.login-note a {
+  color: var(--color-red);
+  text-decoration: underline;
+}
+
+.login-note a:hover {
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-logo {
+    font-size: 2.5rem;
+  }
+
+  .login-container {
+    padding: var(--spacing-md);
+  }
+}

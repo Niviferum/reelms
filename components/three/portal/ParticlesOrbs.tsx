@@ -1,120 +1,117 @@
-// ======================= ParticlesOrbs.tsx =======================
 'use client';
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// — Particules version "A" : orbes ronds + glow, départ centré, flash => explosion latérale puis fade
 const particlesVertex = `
-  attribute vec3 aVelocity;
   uniform float uTime;
-  uniform float uFlash; // pic court autour du flash
-  uniform float uBaseSize;
-  varying float vLife;
+  attribute vec3 aRandomness;
+  varying float vLife; // Durée de vie de la particule
 
-  void main(){
-    // position de départ (proche du centre)
-    vec3 pos = position;
+  void main() {
+    // La particule commence au centre (0,0,0)
+    vec3 pos = vec3(0.0);
+    
+    // Vitesse de base vers l'extérieur (basée sur la position aléatoire initiale)
+    vec3 direction = normalize(position); 
+    float speed = 3.0 + aRandomness.x * 2.0;
 
-    // Léger flottement organique avant/après
-    pos.xy += 0.03 * vec2(
-      sin(uTime * 0.8 + pos.x * 11.0),
-      cos(uTime * 0.9 + pos.y * 13.0)
-    );
+    // Mouvement : Explosion vers l'extérieur + légère dérive sinusoïdale
+    pos += direction * speed * uTime;
+    pos.x += sin(uTime * 2.0 + aRandomness.y * 10.0) * 0.2;
+    pos.y += cos(uTime * 2.0 + aRandomness.z * 10.0) * 0.2;
 
-    // Impulsion d'explosion latérale synchronisée avec le flash
-    float burst = uFlash; // déjà un pic court
-    pos += aVelocity * (0.8 * burst); // drift doux après le flash
+    // Calcul de la vie : 1 au début, 0 après 3 secondes
+    vLife = 1.0 - smoothstep(0.0, 3.0, uTime);
 
-    // Atténuation dans le temps (commence après ~3s)
-    vLife = 1.0 - smoothstep(0.0, 3.0, max(0.0, uTime - 3.0));
+    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
 
-    vec4 mv = modelViewMatrix * vec4(pos, 1.0);
-    // Taille en pixels avec atténuation par perspective
-    gl_PointSize = uBaseSize * (300.0 / -mv.z);
-    gl_Position = projectionMatrix * mv;
+    // Taille : plus grosse au début, diminue avec le temps
+    // Multiplié par (1.0 / -mvPosition.z) pour la perspective
+    gl_PointSize = (300.0 * vLife + 50.0) * aRandomness.y * (1.0 / -mvPosition.z);
   }
 `;
 
 const particlesFragment = `
-  precision mediump float;
-  uniform vec3 uColor;
   varying float vLife;
+  uniform vec3 uColor1;
+  uniform vec3 uColor2;
 
-  void main(){
-    // Coord du sprite (0..1)
-    vec2 p = gl_PointCoord - 0.5;
-    float d = length(p) * 2.0; // 0 centre -> 1 bord
+  void main() {
+    // Calculer la distance au centre du point (pour faire un rond doux)
+    vec2 xy = gl_PointCoord.xy - vec2(0.5);
+    float ll = length(xy);
 
-    // Disque doux avec halo (double smoothstep pour un beau falloff)
-    float core = smoothstep(1.0, 0.0, d);
-    float halo = smoothstep(1.2, 0.0, d) * 0.6;
-    float alpha = (core + halo) * vLife;
+    // Créer un cercle très doux, style "luciole"
+    float alpha = (1.0 - smoothstep(0.0, 0.5, ll)) * vLife;
+    
+    // Mélange de couleurs (Or/Turquoise) selon la vie
+    vec3 finalColor = mix(uColor2, uColor1, vLife);
 
-    vec3 col = uColor * (0.8 + 0.2 * (1.0 - d));
-    gl_FragColor = vec4(col, alpha);
+    gl_FragColor = vec4(finalColor, alpha);
   }
 `;
 
 export function ParticlesOrbs() {
-  const count = 48;
+  // BEAUCOUP MOINS DE PARTICULES
+  const count = 60; 
 
-  const { positions, velocities } = useMemo(() => {
+  const { positions, randomness } = useMemo(() => {
     const pos = new Float32Array(count * 3);
-    const vel = new Float32Array(count * 3);
+    const rnd = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      // départ très proche du centre (cercle petit)
-      const a = Math.random() * Math.PI * 2;
-      const r = Math.random() * 2.0; // compact
-      pos[i * 3 + 0] = Math.cos(a) * r;
-      pos[i * 3 + 1] = Math.sin(a) * r * 0.6; // ellipse légère
-      pos[i * 3 + 2] = 0;
-
-      // vitesse : gauche vs droite (répartition quasi égale)
-      const dir = i % 2 === 0 ? -1 : 1; // alternance pour l'équilibre
-      vel[i * 3 + 0] = dir * (0.6 + Math.random() * 0.7); // dominant vers x
-      vel[i * 3 + 1] = (Math.random() - 0.5) * 0.8;      // un peu de vertical
-      vel[i * 3 + 2] = 0;
+      // Positions de départ sphériques pour déterminer la direction de l'explosion
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() * 2) - 1);
+      pos[i * 3 + 0] = Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = Math.cos(phi);
+      
+      // Valeurs aléatoires pour varier la vitesse et la taille
+      rnd[i * 3 + 0] = Math.random();
+      rnd[i * 3 + 1] = Math.random();
+      rnd[i * 3 + 2] = Math.random();
     }
-    return { positions: pos, velocities: vel };
+    return { positions: pos, randomness: rnd };
   }, []);
 
   const matRef = useRef<THREE.ShaderMaterial>(null);
 
-  // Matériau custom (glow via gl_PointCoord + blending additif)
-  const material = useMemo(() => new THREE.ShaderMaterial({
-    vertexShader: particlesVertex,
-    fragmentShader: particlesFragment,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-    uniforms: {
-      uTime: { value: 0 },
-      uFlash: { value: 0 },
-      uBaseSize: { value: 1 },
-      uColor: { value: new THREE.Color(0.75, 0.95, 1.0) }
-    }
-  }), []);
-
-  // Animation + synchronisation du flash avec le vortex
   useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    material.uniforms.uTime.value = t;
-
-    // Pic gaussien court autour de 3.2s (même logique que le portail)
-    const tFlash = 3.2;
-    const sigma = 0.12;
-    const flash = Math.exp(-Math.pow((t - tFlash) / sigma, 2.0));
-    material.uniforms.uFlash.value = flash;
+    if (matRef.current) {
+      // On utilise le temps global pour l'animation unique de l'explosion
+      matRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    }
   });
 
-  return (
+  const shaderMaterial = useMemo(() => new THREE.ShaderMaterial({
+    vertexShader: particlesVertex,
+    fragmentShader: particlesFragment,
+    uniforms: {
+      uTime: { value: 0 },
+      uColor1: { value: new THREE.Color("#fde047") }, // Jaune/Or
+      uColor2: { value: new THREE.Color("#22d3ee") }, // Turquoise
+    },
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending, // Important pour le côté lumineux
+  }), []);
+
+return (
     <points>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-aVelocity" args={[velocities, 3]} />
+        {/* Utilisation de args pour le constructeur: [tableau, taille_item] */}
+        <bufferAttribute 
+          attach="attributes-position" 
+          args={[positions, 3]} 
+        />
+        <bufferAttribute 
+          attach="attributes-aRandomness" 
+          args={[randomness, 3]} 
+        />
       </bufferGeometry>
-      <primitive ref={matRef} object={material} />
+      <primitive object={shaderMaterial} ref={matRef} />
     </points>
   );
 }

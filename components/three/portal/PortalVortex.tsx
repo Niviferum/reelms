@@ -1,42 +1,29 @@
-// ======================= PortalVortex.tsx ======================= =======================
-'use client';
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Mesh, ShaderMaterial } from 'three';
-import { portalVertexShader, portalFragmentShader, portalShaderUniforms } from './PortalShader';
+// components/three/portal/PortalVortex.tsx
+'use client'
+
+import { useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
+import { PortalMaterial } from './PortalShader' // Assure-toi que ce fichier existe toujours !
 
 export function PortalVortex() {
-  const materialRef = useRef<ShaderMaterial>(null);
-
+  const materialRef = useRef<THREE.ShaderMaterial>(null)
+  
   useFrame((state) => {
-    if (!materialRef.current) return;
-
-    const elapsed = state.clock.elapsedTime;
-    materialRef.current.uniforms.uTime.value = elapsed;
-
-    // Portail visible ~3.5s
-    const progress = Math.min(1, elapsed / 3.5);
-    materialRef.current.uniforms.uProgress.value = progress;
-
-    // Flash d'impact (pic gaussien court)
-    const tFlash = 3.2;
-    const sigma = 0.12;
-    const flash = Math.exp(-Math.pow((elapsed - tFlash) / sigma, 2.0));
-    materialRef.current.uniforms.uFlash.value = flash;
-  });
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = state.clock.elapsedTime
+    }
+  })
 
   return (
-    <mesh>
-      <planeGeometry args={[4, 4, 128, 128]} />
+    <mesh position={[0, 0, -0.1]}> {/* Légèrement en arrière pour ne pas cacher les anneaux */}
+      <planeGeometry args={[8, 8, 32, 32]} /> {/* Assez grand pour remplir l'écran */}
       <shaderMaterial
         ref={materialRef}
-        vertexShader={portalVertexShader}
-        fragmentShader={portalFragmentShader}
-        uniforms={portalShaderUniforms}
-        transparent
+        args={[PortalMaterial]}
+        transparent={true}
         depthWrite={false}
-        toneMapped={false}
       />
     </mesh>
-  );
+  )
 }

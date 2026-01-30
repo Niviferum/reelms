@@ -1,57 +1,32 @@
-import { prisma } from '@/lib/prisma'
+// app/portal-test/page.tsx
+'use client';
 
-export default async function TestPage() {
-  const sessionTypes = await prisma.sessionType.findMany()
-  const users = await prisma.user.findMany()
-  const bookings = await prisma.booking.findMany({
-    include: {
-      user: true,
-      sessionType: true,
-    }
-  })
+import { Canvas } from '@react-three/fiber';
+import { PortalVortex } from '@/components/three/portal/PortalVortex';
+import { PortalRing } from '@/components/three/portal/PortalRing';
+import { PortalFlash } from '@/components/three/portal/PortalFlash';
+import { ParticlesOrbs } from '@/components/three/portal/ParticlesOrbs';
 
+export default function Page() {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-8">🧪 Test de la DB</h1>
-      
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Types de Sessions ({sessionTypes.length})</h2>
-        <div className="space-y-2">
-          {sessionTypes.map(st => (
-            <div key={st.id} className="p-4 border rounded">
-              <h3 className="font-bold">{st.name}</h3>
-              <p className="text-sm text-gray-600">{st.description}</p>
-              <p className="text-sm">Prix: {st.price / 100}€ | Durée: {st.duration}min</p>
-            </div>
-          ))}
-        </div>
-      </section>
+    <div className="w-full h-screen bg-black overflow-hidden">
+      {/* Ajout de bloom/postprocessing plus tard si besoin, pour l'instant brut */}
+      <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
+        <color attach="background" args={['#000']} />
+        
+        {/* Lumière indispensable pour voir les anneaux en 3D */}
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={2} color="#22d3ee" />
+        <pointLight position={[-10, -10, 5]} intensity={1} color="#10b981" />
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Utilisateurs ({users.length})</h2>
-        <div className="space-y-2">
-          {users.map(user => (
-            <div key={user.id} className="p-4 border rounded">
-              <p className="font-bold">{user.discordUsername}</p>
-              <p className="text-sm text-gray-600">Role: {user.role}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">Réservations ({bookings.length})</h2>
-        <div className="space-y-2">
-          {bookings.map(booking => (
-            <div key={booking.id} className="p-4 border rounded">
-              <p><strong>User:</strong> {booking.user.discordUsername}</p>
-              <p><strong>Session:</strong> {booking.sessionType.name}</p>
-              <p><strong>Status:</strong> {booking.status}</p>
-              <p><strong>Date:</strong> {booking.scheduledAt?.toLocaleDateString()}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <group>
+            {/* Ordre d'affichage (du fond vers l'avant) */}
+            <PortalVortex />    {/* Le tunnel */}
+            <PortalRing />      {/* La structure */}
+            <ParticlesOrbs />   {/* Les lucioles */}
+            <PortalFlash />     {/* L'explosion au chargement */}
+        </group>
+      </Canvas>
     </div>
-  )
+  );
 }
