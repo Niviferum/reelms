@@ -50,10 +50,10 @@ export default function LandingPage() {
             <div className="univers-preview">
               <div className="univers-text">
                 <p className="univers-intro">
-                  introduction
+                  Avide de lore ?
                 </p>
                 <p className="univers-description">
-                  description
+                  Découvrez quelques bribes de l'univers que vous explorerez lors de vos sessions.
                 </p>
               </div>
               <div className="univers-cta">

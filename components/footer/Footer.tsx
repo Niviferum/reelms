@@ -8,7 +8,7 @@ export default function Footer() {
         <nav className="footer-links">
           <a href="/legal">CGV/CGU</a>
           <span className="separator">•</span>
-          <a href="https://discord.gg/UK3gGMTNrM" target="_blank" rel="noopener noreferrer">
+          <a href="https://discord.gg/w4z7m3JtdY" target="_blank" rel="noopener noreferrer">
             Discord
           </a>
         </nav>
