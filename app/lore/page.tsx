@@ -30,18 +30,17 @@ export default function LorePage() {
             Parmi ces continents, seuls trois nous sont réellement connus.
           </p>
           <section className="faction">
-            <div className='lore-content'>
+            <div className='lore-content'></div>
+            <p>
+              <h3>Comines</h3>
+              Terre des Hommes, Comines est le théâtre des plus grandes guerres de l’Histoire. Aujourd’hui encore, certaines frontières demeurent sous tension.
+              Ces conflits incessants n’empêchent pourtant pas quelques lieux de prospérer.
+              Babel en est l’exemple le plus éclatant : temple des connaissances du monde et siège du Conseil des Mages.
+              Une immense forteresse de pierre blanche dressée au cœur du désert,
+              lieu isolé et privilégié vers lequel les Hommes se tournent lorsque les heures deviennent trop sombres.
 
-              <p>
-                <h3>Comines</h3>
-                Terre des Hommes, Comines est le théâtre des plus grandes guerres de l’Histoire. Aujourd’hui encore, certaines frontières demeurent sous tension.
-                Ces conflits incessants n’empêchent pourtant pas quelques lieux de prospérer.
-                Babel en est l’exemple le plus éclatant : temple des connaissances du monde et siège du Conseil des Mages.
-                Une immense forteresse de pierre blanche dressée au cœur du désert,
-                lieu isolé et privilégié vers lequel les Hommes se tournent lorsque les heures deviennent trop sombres.
+            </p>
 
-              </p>
-            </div>
           </section>
           <section className="faction">
             <div className='lore-content'></div>
