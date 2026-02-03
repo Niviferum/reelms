@@ -139,7 +139,7 @@ export default function SessionCard({ session }: SessionCardProps) {
                 <h3>Nous contacter</h3>
                 <div className="contact-options">
                   <a 
-                    href="https://discord.gg/votre-serveur" 
+                    href="https://discord.gg/w4z7m3JtdY" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="contact-button discord"
@@ -148,7 +148,7 @@ export default function SessionCard({ session }: SessionCardProps) {
                     Discord
                   </a>
                   <a 
-                    href="mailto:contact@reelms.fr"
+                    href="mailto:contact@tgwor.com"
                     className="contact-button email"
                   >
                     <span>📧</span>
