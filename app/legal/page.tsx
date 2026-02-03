@@ -52,8 +52,8 @@ export default function LegalPage() {
           <p>
             ANDRIEU Lucas<br />
             [Adresse à compléter]<br />
-            Email : contact@reelms.fr<br />
-            Discord : [Lien du serveur Discord]
+            Email : contact@tgwor.com<br />
+            Discord : https://discord.gg/w4z7m3JtdY
           </p>
 
           <h3>Hébergement</h3>
@@ -529,9 +529,9 @@ export default function LegalPage() {
             Pour toute question concernant ces mentions légales et CGV :
           </p>
           <ul>
-            <li>Email : contact@reelms.fr</li>
-            <li>Email données personnelles : privacy@reelms.fr</li>
-            <li>Discord : [Lien du serveur]</li>
+            <li>Email : contact@tgwor.com</li>
+            <li>Email données personnelles : [A compléter]</li>
+            <li>Discord : https://discord.gg/w4z7m3JtdY</li>
           </ul>
         </section>
       </div>
