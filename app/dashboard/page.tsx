@@ -16,6 +16,10 @@ export default async function DashboardPage({ searchParams }: PageProps) {
     redirect('/login')
   }
 
+  if (session.user.role === 'ADMIN') {
+    redirect('/admin')
+  }
+
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
   })

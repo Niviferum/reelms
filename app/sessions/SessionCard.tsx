@@ -25,11 +25,13 @@ export default function SessionCard({ session }: SessionCardProps) {
   const { isAuthenticated } = useAuth()
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
   // Vérifier si c'est un prix variable
   const isPriceVariable = session.priceMax && session.priceMax !== session.priceMin
 
-  const handleReservation = () => {
+  const handleReservation = async () => {
     if (isPriceVariable) {
       // Ouvrir la modale pour prix variable
       setShowModal(true)
@@ -41,8 +43,27 @@ export default function SessionCard({ session }: SessionCardProps) {
       return
     }
 
-    // Rediriger vers la page de paiement Stripe
-    router.push(`/api/checkout?sessionType=${session.slug}`)
+    setCheckoutLoading(true)
+    setCheckoutError(null)
+
+    try {
+      const response = await fetch('/api/stripe/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionTypeId: session.id }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de la création du paiement')
+      }
+
+      window.location.href = data.url
+    } catch (err: any) {
+      setCheckoutError(err.message)
+      setCheckoutLoading(false)
+    }
   }
 
   const formatPrice = () => {
@@ -92,13 +113,17 @@ export default function SessionCard({ session }: SessionCardProps) {
           {/* Prix et CTA */}
           <div className="session-footer">
             <div className="session-price">{formatPrice()}</div>
-            <button 
+            <button
               onClick={handleReservation}
+              disabled={checkoutLoading}
               className="btn btn-primary"
             >
-              {isPriceVariable ? 'Nous Contacter' : 'Réserver'}
+              {checkoutLoading ? 'Chargement...' : isPriceVariable ? 'Nous Contacter' : 'Réserver'}
             </button>
           </div>
+          {checkoutError && (
+            <p className="checkout-error">{checkoutError}</p>
+          )}
         </div>
       </div>
 

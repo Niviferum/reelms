@@ -20,7 +20,7 @@ const lora = Lora({
 })
 
 export const metadata: Metadata = {
-  title: "The Great World of Reelms"
+  title: "Reelms",
 };
 
 export default function RootLayout({
