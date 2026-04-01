@@ -172,7 +172,7 @@ export default function CreateProposalForm({
             })}
             required
             min="0"
-            step="0.01"
+            step="1.00"
             className="form-input"
           />
           <small>Prix en euros (sera converti en centimes)</small>

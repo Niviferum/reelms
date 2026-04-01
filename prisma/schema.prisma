@@ -8,69 +8,90 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(cuid())
-  discordId       String   @unique
+  id              String                  @id @default(cuid())
+  discordId       String                  @unique
   discordUsername String
   discordAvatar   String?
   email           String?
-  role            UserRole @default(USER)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
+  role            UserRole                @default(USER)
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
   bookings        Booking[]
   customProposals CustomSessionProposal[]
 
   @@map("users")
 }
 
-enum UserRole {
-  USER
-  ADMIN
-}
-
 model SessionType {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String
-  slug          String   @unique
-  description   String   @db.Text
-  duration      Int      // en minutes
-  priceMin      Int      // en centimes
-  priceMax      Int?     // en centimes, nullable pour prix fixe
+  slug          String    @unique
+  description   String
+  duration      Int
+  priceMin      Int
+  priceMax      Int?
   stripePriceId String?
   maxPlayers    Int?
   imageUrl      String?
-  active        Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  bookings Booking[]
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  bookings      Booking[]
 
   @@map("session_types")
 }
 
 model Booking {
-  id               String        @id @default(cuid())
+  id               String                 @id @default(cuid())
   userId           String
-  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   sessionTypeId    String
-  sessionType      SessionType   @relation(fields: [sessionTypeId], references: [id])
   calendlyEventId  String?
   calendlyEventUri String?
   stripePaymentId  String?
   stripeCheckoutId String?
-  status           BookingStatus @default(PENDING)
+  status           BookingStatus          @default(PENDING)
   scheduledAt      DateTime?
-  playerCount      Int           @default(1)
-  notes            String?       @db.Text
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-
-  customProposal CustomSessionProposal?
+  playerCount      Int                    @default(1)
+  notes            String?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  sessionType      SessionType            @relation(fields: [sessionTypeId], references: [id])
+  user             User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customProposal   CustomSessionProposal?
 
   @@index([userId])
   @@index([sessionTypeId])
   @@index([status])
   @@map("bookings")
+}
+
+model CustomSessionProposal {
+  id              String         @id @default(cuid())
+  userId          String
+  name            String
+  description     String
+  duration        Int
+  price           Int
+  maxPlayers      Int?
+  status          ProposalStatus @default(PENDING)
+  bookingId       String?        @unique
+  stripePriceId   String?
+  stripeProductId String?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  expiresAt       DateTime?
+  booking         Booking?       @relation(fields: [bookingId], references: [id])
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@map("custom_session_proposals")
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 enum BookingStatus {
@@ -79,35 +100,6 @@ enum BookingStatus {
   CONFIRMED
   CANCELLED
   COMPLETED
-}
-
-model CustomSessionProposal {
-  id          String         @id @default(cuid())
-  userId      String
-  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name        String
-  description String         @db.Text
-  duration    Int            // en minutes
-  price       Int            // en centimes
-  maxPlayers  Int?
-  status      ProposalStatus @default(PENDING)
-
-  // Relation optionnelle vers Booking si accepté
-  bookingId String?  @unique
-  booking   Booking? @relation(fields: [bookingId], references: [id])
-
-  // Stripe (créé à l'acceptation)
-  stripePriceId   String?
-  stripeProductId String?
-
-  notes     String?   @db.Text
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  expiresAt DateTime? // Date d'expiration de l'offre
-
-  @@index([userId])
-  @@index([status])
-  @@map("custom_session_proposals")
 }
 
 enum ProposalStatus {
